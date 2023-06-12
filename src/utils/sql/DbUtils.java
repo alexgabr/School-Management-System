@@ -32,33 +32,70 @@ public class DbUtils {
 
     public static void logInUser(ActionEvent event, String username, String password) {
         try {
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/school", "user", "pass");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/school", "root", "pass");
             PreparedStatement userExists = connection.prepareStatement(DbCom.select("password, acc_type", "users", "username = ?"));
 
             userExists.setString(1, username);
             ResultSet resultSet = userExists.executeQuery();
 
-            while (resultSet.next()) {
-                if (resultSet.getString("password").equals(password)) {
-                    switch (resultSet.getString("acc_type")) {
-                        case "principal":
-                            changeScene(event, "designs/homepage-principal.fxml", "Welcome!");
-                            break;
-                        case "staff":
-                            changeScene(event, "designs/homepage-staff.fxml", "Welcome!");
-                            break;
-                        case "teacher":
-                            changeScene(event, "designs/homepage-teacher.fxml", "Welcome!");
-                            break;
-                        case "student":
-                            changeScene(event, "designs/homepage.fxml", "Welcome!");
-                    }
-                } else {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
+            if (resultSet.isBeforeFirst()) {
+                while (resultSet.next()) {
+                    if (resultSet.getString("password").equals(password)) {
+                        switch (resultSet.getString("acc_type")) {
+                            case "principal":
+                                changeScene(event, "designs/homepage-principal.fxml", "Welcome!");
+                                break;
+                            case "staff":
+                                changeScene(event, "designs/homepage-staff.fxml", "Welcome!");
+                                break;
+                            case "teacher":
+                                changeScene(event, "designs/homepage-teacher.fxml", "Welcome!");
+                                break;
+                            case "student":
+                                changeScene(event, "designs/homepage.fxml", "Welcome!");
+                        }
+                    } else {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
 
-                    alert.setContentText("User not found!");
-                    alert.show();
+                        alert.setContentText("User not found!");
+                        alert.show();
+                    }
                 }
+            }
+            userExists.close();
+            resultSet.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void signUpUser(ActionEvent event, String firstName, String lastName, String type, String password) {
+        String username = firstName + " " + lastName;
+
+        try {
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/school", "root", "pass");
+
+            PreparedStatement userExists = connection.prepareStatement(DbCom.select("*", "users", "username = ?"));
+            userExists.setString(1, username);
+            ResultSet resultSet = userExists.executeQuery();
+
+            if (resultSet.isBeforeFirst()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+
+                alert.setContentText("User already exists!");
+                alert.show();
+            } else {
+                PreparedStatement insert = connection.prepareStatement(DbCom.insertSpecColumns("users", "username, password, acc_type", "(?, ?, ?)"));
+                insert.setString(1,username);
+                insert.setString(2, password);
+                insert.setString(3, type);
+
+                insert.executeUpdate();
+
+                insert.close();
+
+                changeScene(event, "designs/log-in.fxml", "Log in");
             }
             userExists.close();
             resultSet.close();
