@@ -49,7 +49,12 @@ public class LogInController implements Initializable {
             }
         });
 
-        //TODO reset_pass button
+        bt_reset_pass.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                DbUtils.changeScene(event, "designs/reset-pass-page.fxml", "Reset password");
+            }
+        });
     }
 
 }
