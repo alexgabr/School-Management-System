@@ -53,7 +53,7 @@ public class SignUpController implements Initializable {
         bt_log_in.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                DbUtils.changeScene(event, "designs/log-in.fxml", "Log in");
+                DbUtils.changeScene(event, "/designs/log-in.fxml", "Log in");
             }
         });
     }

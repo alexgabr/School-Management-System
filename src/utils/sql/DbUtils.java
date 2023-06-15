@@ -13,12 +13,13 @@ import javafx.event.ActionEvent;
 
 import java.io.IOException;
 import java.sql.*;
+import java.util.Objects;
 
 public class DbUtils {
     public static void changeScene(ActionEvent event, String fxmlFile, String title) {
         Parent root = null;
         try {
-            root = FXMLLoader.load(DbUtils.class.getResource(fxmlFile));
+            root = FXMLLoader.load(Objects.requireNonNull(DbUtils.class.getResource(fxmlFile)));
         } catch (IOException e) {
             e.printStackTrace();
         }
