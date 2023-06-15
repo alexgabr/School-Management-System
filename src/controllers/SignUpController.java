@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.PasswordField;
@@ -28,7 +29,7 @@ public class SignUpController implements Initializable {
     @FXML
     private ChoiceBox<String> ch_occupation;
 
-    private final String[] occupations = {"principal", "staff", "teacher", "student"};
+    private final String[] occupations = { "principal", "staff", "teacher", "student" };
 
     @FXML
     private TextField tf_first_name;
@@ -46,7 +47,16 @@ public class SignUpController implements Initializable {
         bt_signup.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                DbUtils.signUpUser(event, tf_first_name.getText(), tf_last_name.getText(), ch_occupation.getValue(), tf_password.getText());
+                if (tf_first_name.getText().trim().isEmpty() || tf_last_name.getText().trim().isEmpty()
+                        || tf_password.getText().trim().isEmpty()) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+
+                    alert.setContentText("Incorrect input format! Try again!");
+                    alert.show();
+                } else {
+                    DbUtils.signUpUser(event, tf_first_name.getText(), tf_last_name.getText(), ch_occupation.getValue(),
+                            tf_password.getText());
+                }
             }
         });
 
