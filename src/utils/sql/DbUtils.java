@@ -33,7 +33,8 @@ public class DbUtils {
 
     public static void logInUser(ActionEvent event, String username, String password) {
         try {
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/school", "root", "pass");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/school", "root",
+                    "pass");
             PreparedStatement userExists = connection
                     .prepareStatement(DbCom.select("password, acc_type", "users", "username = ?"));
 
@@ -73,13 +74,16 @@ public class DbUtils {
         }
     }
 
-    public static void signUpUser(ActionEvent event, String firstName, String lastName, String type, String password) {
+    public static void signUpUser(ActionEvent event, String firstName, String lastName, String type,
+            String password) {
         String username = firstName + " " + lastName;
 
         try {
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/school", "root", "pass");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/school", "root",
+                    "pass");
 
-            PreparedStatement userExists = connection.prepareStatement(DbCom.select("*", "users", "username = ?"));
+            PreparedStatement userExists = connection
+                    .prepareStatement(DbCom.select("*", "users", "username = ?"));
             userExists.setString(1, username);
             ResultSet resultSet = userExists.executeQuery();
 
@@ -88,20 +92,23 @@ public class DbUtils {
 
                 alert.setContentText("User already exists!");
                 alert.show();
+
+                // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
             } else {
                 PreparedStatement insertUser = connection.prepareStatement(
                         DbCom.insertSpecColumns("users", "username, password, acc_type", "(?, ?, ?)"));
                 insertUser.setString(1, username);
                 insertUser.setString(2, password);
                 insertUser.setString(3, type);
-                insertUser.setString(4, username);
 
                 PreparedStatement insert;
 
                 switch (type) {
                     case "principal":
                         insert = connection.prepareStatement(
-                                DbCom.insertSpecColumns("staff", "first_name, last_name, position", "(?, ?, ?)"));
+                                DbCom.insertSpecColumns("staff", "first_name, last_name, position",
+                                        "(?, ?, ?)"));
                         insert.setString(1, firstName);
                         insert.setString(2, lastName);
                         insert.setString(3, type);
@@ -111,7 +118,8 @@ public class DbUtils {
                         break;
                     case "staff":
                         insert = connection
-                                .prepareStatement(DbCom.insertSpecColumns("staff", "first_name, last_name", "(?, ?)"));
+                                .prepareStatement(DbCom.insertSpecColumns("staff",
+                                        "first_name, last_name", "(?, ?)"));
                         insert.setString(1, firstName);
                         insert.setString(2, lastName);
 
@@ -120,7 +128,8 @@ public class DbUtils {
                         break;
                     case "teacher":
                         insert = connection.prepareStatement(
-                                DbCom.insertSpecColumns("teachers", "first_name, last_name", "(?, ?, ?)"));
+                                DbCom.insertSpecColumns("teachers", "first_name, last_name",
+                                        "(?, ?)"));
                         insert.setString(1, firstName);
                         insert.setString(2, lastName);
 
@@ -147,14 +156,17 @@ public class DbUtils {
 
     public static void passForget(ActionEvent event, String username, String newpass) {
         try {
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/school", "root", "pass");
+            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/school", "root",
+                    "pass");
 
-            PreparedStatement select = connection.prepareStatement(DbCom.select("username", "users", "username = ?"));
+            PreparedStatement select = connection
+                    .prepareStatement(DbCom.select("username", "users", "username = ?"));
             select.setString(1, username);
             ResultSet resultSet = select.executeQuery();
 
             PreparedStatement insert = connection
-                    .prepareStatement(DbCom.updateRows("users", "password", newpass, "varchar", "username = ?"));
+                    .prepareStatement(
+                            DbCom.updateRows("users", "password", newpass, "varchar", "username = ?"));
             insert.setString(1, username);
 
             if (resultSet == null) {
