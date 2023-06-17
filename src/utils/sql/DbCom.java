@@ -24,6 +24,10 @@ public class DbCom {
         return "INSERT INTO " + table + "(" + columns + ")" + " VALUES " + values;
     }
 
+    public static String insertSpecColumns(String table, String columns, String values, String where){
+        return insertSpecColumns(table, columns, values) + " WHERE " + where;
+    }
+
     // alter table
     public static String rename(String table, String columnName, String newName) {
         return "ALTER TABLE " + table + " RENAME " + columnName + " TO " + newName;

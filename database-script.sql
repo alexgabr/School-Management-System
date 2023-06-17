@@ -18,8 +18,8 @@ CREATE TABLE logsbook(
 
 CREATE TABLE registration_ids(
     reg_id INT PRIMARY KEY,
-    acc_type VARCHAR(100) NOT NULL
-    used/not_used VARCHAR(10)
+    acc_type VARCHAR(100) NOT NULL,
+    used_not_used VARCHAR(10)
 );
 
 CREATE TABLE users(
@@ -35,8 +35,8 @@ CREATE TABLE students(
     first_name VARCHAR(80) NOT NULL,
     last_name VARCHAR(80) NOT NULL,
     class_year VARCHAR(10) NOT NULL,
-    global_average DECIMAL(2,2) NOT NULL,
-    admision_date DATE NOT NULL
+    global_average DECIMAL(2,2),
+    admision_date DATE 
 );
 
 CREATE TABLE teachers(
