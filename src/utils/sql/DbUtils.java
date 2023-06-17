@@ -16,6 +16,9 @@ import java.sql.*;
 import java.util.Objects;
 
 public class DbUtils {
+
+    private final static String url = "jdbc:mysql://localhost:3306/school", user = "root", pass = "pass";
+
     public static void changeScene(ActionEvent event, String fxmlFile, String title) {
         Parent root = null;
         try {
@@ -33,8 +36,7 @@ public class DbUtils {
 
     public static void logInUser(ActionEvent event, String username, String password) {
         try {
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/school", "root",
-                    "pass");
+            Connection connection = DriverManager.getConnection(url, user, pass);
             PreparedStatement userExists = connection
                     .prepareStatement(DbCom.select("password, acc_type", "users", "username = ?"));
 
@@ -75,32 +77,45 @@ public class DbUtils {
     }
 
     public static void signUpUser(ActionEvent event, String firstName, String lastName, String type,
-            String password) {
+            String password, String registrationId) {
         String username = firstName + " " + lastName;
+        ResultSet resultSet;
 
         try {
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/school", "root",
-                    "pass");
+            Connection connection = DriverManager.getConnection(url, user, pass);
 
             PreparedStatement userExists = connection
                     .prepareStatement(DbCom.select("*", "users", "username = ?"));
             userExists.setString(1, username);
-            ResultSet resultSet = userExists.executeQuery();
+            resultSet = userExists.executeQuery();
 
             if (resultSet.isBeforeFirst()) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
 
                 alert.setContentText("User already exists!");
                 alert.show();
+            }
 
-                // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            PreparedStatement regID = connection.prepareStatement(DbCom.select("*", "registration_ids", "reg_id = ?"));
+            regID.setString(1, registrationId);
+            resultSet = regID.executeQuery();
 
-            } else {
+            if (resultSet == null) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+
+                alert.setContentText("Registration id not found!");
+                alert.show();
+            } else if (resultSet.getString("reg_id").equals(registrationId)
+                    && resultSet.getString("acc_type").equals(type)) {
+
                 PreparedStatement insertUser = connection.prepareStatement(
                         DbCom.insertSpecColumns("users", "username, password, acc_type", "(?, ?, ?)"));
                 insertUser.setString(1, username);
                 insertUser.setString(2, password);
                 insertUser.setString(3, type);
+
+                insertUser.executeUpdate();
+                insertUser.close();
 
                 PreparedStatement insert;
 
@@ -140,12 +155,15 @@ public class DbUtils {
                         break;
                 }
 
-                insertUser.executeUpdate();
-
-                insertUser.close();
-
                 changeScene(event, "/designs/log-in.fxml", "Log in");
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+
+                alert.setContentText("Incorrect data input!");
+                alert.show();
             }
+
+            regID.close();
             userExists.close();
             resultSet.close();
             connection.close();
@@ -156,8 +174,7 @@ public class DbUtils {
 
     public static void passForget(ActionEvent event, String username, String newpass) {
         try {
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/school", "root",
-                    "pass");
+            Connection connection = DriverManager.getConnection(url, user, pass);
 
             PreparedStatement select = connection
                     .prepareStatement(DbCom.select("username", "users", "username = ?"));
@@ -169,7 +186,7 @@ public class DbUtils {
                             DbCom.updateRows("users", "password", newpass, "varchar", "username = ?"));
             insert.setString(1, username);
 
-            if (resultSet == null) {
+            if (resultSet == null) { // de testat
                 Alert alert = new Alert(Alert.AlertType.ERROR);
 
                 alert.setContentText("User not found");

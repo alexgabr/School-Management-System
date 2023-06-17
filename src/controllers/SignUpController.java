@@ -40,6 +40,9 @@ public class SignUpController implements Initializable {
     @FXML
     private PasswordField tf_password;
 
+    @FXML
+    private TextField tf_registrationID;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         ch_occupation.getItems().addAll(occupations);
@@ -55,7 +58,7 @@ public class SignUpController implements Initializable {
                     alert.show();
                 } else {
                     DbUtils.signUpUser(event, tf_first_name.getText(), tf_last_name.getText(), ch_occupation.getValue(),
-                            tf_password.getText());
+                            tf_password.getText(), tf_registrationID.getText());
                 }
             }
         });

@@ -70,5 +70,6 @@
             <Font name="Arial Rounded MT Bold" size="26.0" />
          </font>
       </Label>
+      <TextField fx:id="tf_registrationID" layoutX="14.0" layoutY="200.0" prefHeight="20.0" prefWidth="150.0" />
    </children>
 </AnchorPane>

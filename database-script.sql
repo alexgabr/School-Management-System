@@ -16,6 +16,12 @@ CREATE TABLE logsbook(
     date_time DATETIME NOT NULL
 );
 
+CREATE TABLE registration_ids(
+    reg_id INT PRIMARY KEY,
+    acc_type VARCHAR(100) NOT NULL
+    used/not_used VARCHAR(10)
+);
+
 CREATE TABLE users(
 	user_id INT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(200) NOT NULL UNIQUE,
