@@ -11,7 +11,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SignUpController">
    <children>
-      <AnchorPane layoutX="159.0" layoutY="56.0" prefHeight="297.0" prefWidth="282.0" style="-fx-background-color: #ffd606;">
+      <AnchorPane layoutX="159.0" layoutY="64.0" prefHeight="290.0" prefWidth="282.0" style="-fx-background-color: #ffd606;">
          <children>
             <Label layoutX="93.0" layoutY="14.0" text="Sign up" underline="true">
                <font>
@@ -30,7 +30,7 @@
                   <Font name="Arial" size="14.0" />
                </font>
             </Label>
-            <Button fx:id="bt_signup" layoutX="93.0" layoutY="253.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="95.0" style="-fx-background-color: #ffe041;" text="Sign up">
+            <Button fx:id="bt_signup" layoutX="93.0" layoutY="230.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="95.0" style="-fx-background-color: #ffe041;" text="Sign up">
                <font>
                   <Font size="16.0" />
                </font>
@@ -44,22 +44,16 @@
                </font>
             </Label>
             <TextField fx:id="tf_last_name" layoutX="99.0" layoutY="112.0" prefHeight="20.0" prefWidth="150.0" />
-            <Label layoutX="20.0" layoutY="220.0" prefHeight="20.0" prefWidth="78.0" text="Occupation">
+            <Label layoutX="20.0" layoutY="187.0" prefHeight="20.0" prefWidth="78.0" text="Occupation">
                <font>
                   <Font name="Arial" size="14.0" />
                </font>
             </Label>
-            <ChoiceBox fx:id="ch_occupation" layoutX="99.0" layoutY="217.0" prefWidth="150.0">
+            <ChoiceBox fx:id="ch_occupation" layoutX="99.0" layoutY="184.0" prefWidth="150.0">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor>
             </ChoiceBox>
-            <TextField fx:id="tf_registrationID" layoutX="113.0" layoutY="181.0" prefHeight="26.0" prefWidth="136.0" />
-            <Label layoutX="20.0" layoutY="184.0" prefHeight="20.0" prefWidth="95.0" text="Registration id">
-               <font>
-                  <Font name="Arial" size="14.0" />
-               </font>
-            </Label>
          </children>
       </AnchorPane>
       <Label layoutX="227.0" layoutY="360.0" prefHeight="20.0" prefWidth="124.0" text="Already a user?">

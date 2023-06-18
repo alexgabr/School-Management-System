@@ -77,7 +77,7 @@ public class DbUtils {
     }
 
     public static void signUpUser(ActionEvent event, String firstName, String lastName, String type,
-            String password, String registrationId) {
+            String password) {
         String username = firstName + " " + lastName;
         ResultSet resultSet;
 
@@ -94,82 +94,56 @@ public class DbUtils {
 
                 alert.setContentText("User already exists!");
                 alert.show();
-            }
+            } else {
+                PreparedStatement insertUserInfo = connection.prepareStatement(DbCom.insertSpecColumns("users",
+                        "username, password, acc_type, sign_up_date", "(?, ?, ?, NOW())"));
+                insertUserInfo.setString(1, username);
+                insertUserInfo.setString(2, password);
+                insertUserInfo.setString(3, type);
 
-            PreparedStatement regID = connection.prepareStatement(DbCom.select("*", "registration_ids", "reg_id = ?"));
-            regID.setString(1, registrationId);
-            resultSet = regID.executeQuery();
+                insertUserInfo.executeUpdate();
 
-            while (resultSet.next()) {
-                if (resultSet.getString("reg_id").equals(registrationId)
-                        && resultSet.getString("acc_type").equals(type)) {
+                System.out.println("test 1");
 
-                    //insert info into users table
-                    PreparedStatement insertUser = connection.prepareStatement(
-                            DbCom.insertSpecColumns("users", "username, password, acc_type, sign_up_date", "(?, ?, ?, ?)"));
-                    insertUser.setString(1, username);
-                    insertUser.setString(2, password);
-                    insertUser.setString(3, type);
-                    insertUser.setString(4, "NOW()");
+                PreparedStatement insertType;
+                switch (type) {
+                    case "principal":
+                        insertType = connection.prepareStatement(
+                                DbCom.insertSpecColumns("staff", "first_name, last_name, position", "(?, ?, ?)"));
+                        insertType.setString(1, firstName);
+                        insertType.setString(2, lastName);
+                        insertType.setString(3, type);
 
-                    insertUser.executeUpdate();
-                    insertUser.close();
+                        insertType.executeUpdate();
+                        insertType.close();
+                        break;
+                    case "staff":
+                        insertType = connection
+                                .prepareStatement(DbCom.insertSpecColumns("staff", "first_name, last_name", "(?, ?)"));
+                        insertType.setString(1, firstName);
+                        insertType.setString(2, lastName);
 
-                    //insert info into staff/teachers table
-                    PreparedStatement insert;
+                        insertType.executeUpdate();
+                        insertType.close();
+                        break;
+                    case "teacher":
+                        insertType = connection.prepareStatement(
+                                DbCom.insertSpecColumns("teachers", "first_name, last_name", "(?, ?)"));
+                        insertType.setString(1, firstName);
+                        insertType.setString(2, lastName);
 
-                    switch (type) {
-                        case "principal":
-                            insert = connection.prepareStatement(
-                                    DbCom.insertSpecColumns("staff", "first_name, last_name, position",
-                                            "(?, ?, ?)"));
-                            insert.setString(1, firstName);
-                            insert.setString(2, lastName);
-                            insert.setString(3, type);
-
-                            insert.executeUpdate();
-                            insert.close();
-                            break;
-                        case "staff":
-                            insert = connection
-                                    .prepareStatement(DbCom.insertSpecColumns("staff",
-                                            "first_name, last_name", "(?, ?)"));
-                            insert.setString(1, firstName);
-                            insert.setString(2, lastName);
-
-                            insert.executeUpdate();
-                            insert.close();
-                            break;
-                        case "teacher":
-                            insert = connection.prepareStatement(
-                                    DbCom.insertSpecColumns("teachers", "first_name, last_name",
-                                            "(?, ?)"));
-                            insert.setString(1, firstName);
-                            insert.setString(2, lastName);
-
-                            insert.executeUpdate();
-                            insert.close();
-                            break;
-                        case "student":
-                            break;
-                    }
-
-                    PreparedStatement insertUsedRegistration = connection.prepareStatement(DbCom.insertSpecColumns("registration_ids", "used_not_used", "used" , "reg_id = ?"));
-                    insertUsedRegistration.setString(1, registrationId);
-                    
-                    insertUsedRegistration.executeUpdate();
-                    insertUsedRegistration.close();
-
-                    changeScene(event, "/designs/log-in.fxml", "Log in");
-                } else {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-
-                    alert.setContentText("Incorrect data input!");
-                    alert.show();
+                        insertType.executeUpdate();
+                        insertType.close();
+                        break;
+                    case "student":
+                        break;
                 }
             }
 
-            regID.close();
+            System.out.println("Test 2");
+        
+            changeScene(event, "/designs/log-in.fxml", "Log in");
+
             userExists.close();
             resultSet.close();
             connection.close();

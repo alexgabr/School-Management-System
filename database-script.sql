@@ -16,14 +16,8 @@ CREATE TABLE logsbook(
     date_time DATETIME NOT NULL
 );
 
-CREATE TABLE registration_ids(
-    reg_id INT PRIMARY KEY,
-    acc_type VARCHAR(100) NOT NULL,
-    used_not_used VARCHAR(10)
-);
-
 CREATE TABLE users(
-	user_id INT PRIMARY KEY AUTO_INCREMENT,
+	user_id INT PRIMARY KEY AUTO_INCREMENT, --TODO user_id connected to staff_id/teacher_id
     username VARCHAR(200) NOT NULL UNIQUE,
     password VARCHAR(80) NOT NULL,
     acc_type VARCHAR(50) NOT NULL,

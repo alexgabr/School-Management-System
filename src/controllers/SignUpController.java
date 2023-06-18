@@ -40,9 +40,6 @@ public class SignUpController implements Initializable {
     @FXML
     private PasswordField tf_password;
 
-    @FXML
-    private TextField tf_registrationID;
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         ch_occupation.getItems().addAll(occupations);
@@ -51,14 +48,14 @@ public class SignUpController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 if (tf_first_name.getText().trim().isEmpty() || tf_last_name.getText().trim().isEmpty()
-                        || tf_password.getText().trim().isEmpty() /*|| ch_occupation.getValue().trim().isEmpty()*/) {
+                        || tf_password.getText().trim().isEmpty() /*|| ch_occupation.getValue().trim().isEmpty()*/) { //TODO
                     Alert alert = new Alert(Alert.AlertType.ERROR);
 
                     alert.setContentText("Incorrect input format! Try again!");
                     alert.show();
                 } else {
                     DbUtils.signUpUser(event, tf_first_name.getText(), tf_last_name.getText(), ch_occupation.getValue(),
-                            tf_password.getText(), tf_registrationID.getText());
+                            tf_password.getText());
                 }
             }
         });
