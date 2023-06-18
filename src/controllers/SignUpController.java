@@ -58,7 +58,7 @@ public class SignUpController implements Initializable {
                     alert.show();
                 } else {
                     DbUtils.signUpUser(event, tf_first_name.getText(), tf_last_name.getText(), ch_occupation.getValue(),
-                            tf_password.getText());
+                            tf_password.getText(), tf_registrationID.getText());
                 }
             }
         });

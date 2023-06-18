@@ -77,7 +77,7 @@ public class DbUtils {
     }
 
     public static void signUpUser(ActionEvent event, String firstName, String lastName, String type,
-            String password) {
+            String password, String registrationId) {
         String username = firstName + " " + lastName;
         ResultSet resultSet;
 
@@ -95,7 +95,81 @@ public class DbUtils {
                 alert.setContentText("User already exists!");
                 alert.show();
             }
-            
+
+            PreparedStatement regID = connection.prepareStatement(DbCom.select("*", "registration_ids", "reg_id = ?"));
+            regID.setString(1, registrationId);
+            resultSet = regID.executeQuery();
+
+            while (resultSet.next()) {
+                if (resultSet.getString("reg_id").equals(registrationId)
+                        && resultSet.getString("acc_type").equals(type)) {
+
+                    //insert info into users table
+                    PreparedStatement insertUser = connection.prepareStatement(
+                            DbCom.insertSpecColumns("users", "username, password, acc_type, sign_up_date", "(?, ?, ?, ?)"));
+                    insertUser.setString(1, username);
+                    insertUser.setString(2, password);
+                    insertUser.setString(3, type);
+                    insertUser.setString(4, "NOW()");
+
+                    insertUser.executeUpdate();
+                    insertUser.close();
+
+                    //insert info into staff/teachers table
+                    PreparedStatement insert;
+
+                    switch (type) {
+                        case "principal":
+                            insert = connection.prepareStatement(
+                                    DbCom.insertSpecColumns("staff", "first_name, last_name, position",
+                                            "(?, ?, ?)"));
+                            insert.setString(1, firstName);
+                            insert.setString(2, lastName);
+                            insert.setString(3, type);
+
+                            insert.executeUpdate();
+                            insert.close();
+                            break;
+                        case "staff":
+                            insert = connection
+                                    .prepareStatement(DbCom.insertSpecColumns("staff",
+                                            "first_name, last_name", "(?, ?)"));
+                            insert.setString(1, firstName);
+                            insert.setString(2, lastName);
+
+                            insert.executeUpdate();
+                            insert.close();
+                            break;
+                        case "teacher":
+                            insert = connection.prepareStatement(
+                                    DbCom.insertSpecColumns("teachers", "first_name, last_name",
+                                            "(?, ?)"));
+                            insert.setString(1, firstName);
+                            insert.setString(2, lastName);
+
+                            insert.executeUpdate();
+                            insert.close();
+                            break;
+                        case "student":
+                            break;
+                    }
+
+                    PreparedStatement insertUsedRegistration = connection.prepareStatement(DbCom.insertSpecColumns("registration_ids", "used_not_used", "used" , "reg_id = ?"));
+                    insertUsedRegistration.setString(1, registrationId);
+                    
+                    insertUsedRegistration.executeUpdate();
+                    insertUsedRegistration.close();
+
+                    changeScene(event, "/designs/log-in.fxml", "Log in");
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+
+                    alert.setContentText("Incorrect data input!");
+                    alert.show();
+                }
+            }
+
+            regID.close();
             userExists.close();
             resultSet.close();
             connection.close();
