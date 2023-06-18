@@ -51,6 +51,57 @@ public class DbUtils {
         }
     }
 
+    public static String insertUserId(String table, String columnNameId, String firstName, String lastName) {
+        String username = firstName + " " + lastName;
+        String select = null;
+        try {
+            Connection connection = DriverManager.getConnection(url, user, pass);
+
+            PreparedStatement selectId = connection.prepareStatement(DbCom.select("user_id", "users", "username = ?"));
+            selectId.setString(1, username);
+
+            ResultSet resultSet = selectId.executeQuery();
+
+            while (resultSet.next()) {
+                select = resultSet.getString("user_id");
+            }
+
+            PreparedStatement insert = connection.prepareStatement(
+                    DbCom.updateRows(table, columnNameId, select, "VARCHAR", "first_name = ? AND last_name = ?"));
+            insert.setString(1, firstName);
+            insert.setString(2, lastName);
+            insert.executeUpdate();
+
+            insert.close();
+            resultSet.close();
+            selectId.close();
+            connection.close();
+
+            System.out.println("The user_id " + select + " has been succesfully added to table " + table + "!");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return select;
+    }
+
+    public static void insertSalaryID(String table, String columnNameID, String id, String firstName, String lastName) {
+        try {
+            Connection connection = DriverManager.getConnection(url, user, pass);
+
+            PreparedStatement insert = connection.prepareStatement(
+                    DbCom.insertSpecColumns(table, columnNameID, "(" + id + ")"));
+            insert.executeUpdate();
+
+            insert.close();
+            connection.close();
+
+            System.out.println("The id " + id + " has been succesfully added to salary table " + table + "!");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void logInUser(ActionEvent event, String username, String password) {
         try {
             Connection connection = DriverManager.getConnection(url, user, pass);
@@ -101,7 +152,7 @@ public class DbUtils {
         try {
             Connection connection = DriverManager.getConnection(url, user, pass);
 
-            //checking if the user already exists
+            // checking if the user already exists
             PreparedStatement userExists = connection
                     .prepareStatement(DbCom.select("*", "users", "username = ?"));
             userExists.setString(1, username);
@@ -113,7 +164,7 @@ public class DbUtils {
                 alert.setContentText("User already exists!");
                 alert.show();
             } else {
-                //inserting the info into users&specific acc type table
+                // inserting the info into users&specific acc type table
                 PreparedStatement insertUserInfo = connection.prepareStatement(DbCom.insertSpecColumns("users",
                         "username, password, acc_type, sign_up_date", "(?, ?, ?, NOW())"));
                 insertUserInfo.setString(1, username);
@@ -123,6 +174,7 @@ public class DbUtils {
                 insertUserInfo.executeUpdate();
 
                 PreparedStatement insertType;
+                String id;
                 switch (type) {
                     case "principal":
                         insertType = connection.prepareStatement(
@@ -133,6 +185,11 @@ public class DbUtils {
 
                         insertType.executeUpdate();
                         insertType.close();
+
+                        // inserting the user id in the table
+                        id = insertUserId("staff", "staff_id", firstName, lastName);
+                        // inserting the id in the salary table
+                        insertSalaryID("staff_salaries", "id", id, firstName, lastName);
                         break;
                     case "staff":
                         insertType = connection
@@ -142,6 +199,11 @@ public class DbUtils {
 
                         insertType.executeUpdate();
                         insertType.close();
+
+                        // inserting the user id in the table
+                        id = insertUserId("staff", "staff_id", firstName, lastName);
+                        // inserting the id in the salary table
+                        insertSalaryID("staff_salaries", "id", id, firstName, lastName);
                         break;
                     case "teacher":
                         insertType = connection.prepareStatement(
@@ -151,13 +213,18 @@ public class DbUtils {
 
                         insertType.executeUpdate();
                         insertType.close();
+
+                        // inserting the user id in the table
+                        id = insertUserId("teachers", "teacher_id", firstName, lastName);
+                        // inserting the id in the salary table
+                        insertSalaryID("teachers_salaries", "id", id, firstName, lastName);
                         break;
-                    case "student": //TODO design smth for students table
+                    case "student": // TODO design smth for students table
                         break;
                 }
             }
 
-            //insert into logsbook table
+            // insert into logsbook table
             PreparedStatement selecStatement = connection
                     .prepareStatement(DbCom.select("user_id", "users", "username = ?"));
             selecStatement.setString(1, username);
@@ -176,7 +243,7 @@ public class DbUtils {
                 insertIntoLogsBook("New account has been created!");
             }
 
-            //change the scene
+            // change the scene
             changeScene(event, "/designs/log-in.fxml", "Log in");
 
             userExists.close();
@@ -203,7 +270,7 @@ public class DbUtils {
                             DbCom.updateRows("users", "password", newpass, "varchar", "username = ?"));
             insert.setString(1, username);
 
-            if (resultSet == null) { // de testat
+            if (resultSet == null) { // TODO de testat
                 Alert alert = new Alert(Alert.AlertType.ERROR);
 
                 alert.setContentText("User not found");
@@ -216,7 +283,6 @@ public class DbUtils {
 
             select.close();
             insert.close();
-            resultSet.close();
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();

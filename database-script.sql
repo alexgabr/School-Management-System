@@ -17,7 +17,7 @@ CREATE TABLE logsbook(
 );
 
 CREATE TABLE users(
-	user_id INT PRIMARY KEY AUTO_INCREMENT, --TODO user_id connected to staff_id/teacher_id
+	user_id INT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(200) NOT NULL UNIQUE,
     password VARCHAR(80) NOT NULL,
     acc_type VARCHAR(50) NOT NULL,
@@ -25,41 +25,37 @@ CREATE TABLE users(
 );
 
 CREATE TABLE students(
-	student_id INT PRIMARY KEY AUTO_INCREMENT,
+	student_id INT,
     first_name VARCHAR(80) NOT NULL,
     last_name VARCHAR(80) NOT NULL,
     class_year VARCHAR(10) NOT NULL,
     global_average DECIMAL(2,2),
-    admision_date DATE 
+    admision_date DATE ,
+    FOREIGN KEY(student_id) REFERENCES users(user_id)
 );
 
 CREATE TABLE teachers(
-	teacher_id INT PRIMARY KEY AUTO_INCREMENT,
-    first_name VARCHAR(80) NOT NULL,
-    last_name VARCHAR(80) NOT NULL,
+	teacher_id INT,
+    first_name VARCHAR(80),
+    last_name VARCHAR(80),
     subjects VARCHAR(200)
 );
 
 CREATE TABLE staff(
-	staff_id INT PRIMARY KEY AUTO_INCREMENT,
-    first_name VARCHAR(80) NOT NULL,
-    last_name VARCHAR(80) NOT NULL,
+	staff_id INT,
+    first_name VARCHAR(80),
+    last_name VARCHAR(80),
     position VARCHAR(80)
 );
 
-ALTER TABLE staff
-AUTO_INCREMENT = 1000;
-
 CREATE TABLE teachers_salaries(
-	id INT PRIMARY KEY AUTO_INCREMENT,
-    salary_value DECIMAL(5,2) NOT NULL,
-    FOREIGN KEY(id) REFERENCES teachers(teacher_id)
+	id INT,
+    salary_value DECIMAL(5,2)
 );
 
 CREATE TABLE staff_salaries(
-	id INT PRIMARY KEY AUTO_INCREMENT,
-    salary_value DECIMAL(5,2) NOT NULL,
-    FOREIGN KEY(id) REFERENCES teachers(teacher_id)
+	id INT,
+    salary_value DECIMAL(5,2)
 );
 
 CREATE TABLE grades(
@@ -72,19 +68,19 @@ CREATE TABLE grades(
 );
 
 CREATE TABLE math(
-	id INT PRIMARY KEY AUTO_INCREMENT,
+	id INT NOT NULL,
     average INT,
     FOREIGN KEY(id) REFERENCES students(student_id)
 );
 
 CREATE TABLE physics(
-	id INT PRIMARY KEY AUTO_INCREMENT,
+	id INT NOT NULL,
     average INT,
     FOREIGN KEY(id) REFERENCES students(student_id)
 );
 
 CREATE TABLE chemistry(
-	id INT PRIMARY KEY AUTO_INCREMENT,
+	id INT,
     average INT,
     FOREIGN KEY(id) REFERENCES students(student_id)
 );
