@@ -34,6 +34,23 @@ public class DbUtils {
         stage.show();
     }
 
+    public static void insertIntoLogsBook(String info) {
+        try {
+            Connection connection = DriverManager.getConnection(url, user, pass);
+
+            PreparedStatement insert = connection
+                    .prepareStatement(DbCom.insertSpecColumns("logsbook", "info, date_time", "(?, NOW())"));
+            insert.setString(1, info);
+            insert.executeUpdate();
+
+            insert.close();
+
+            System.out.println(info);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void logInUser(ActionEvent event, String username, String password) {
         try {
             Connection connection = DriverManager.getConnection(url, user, pass);
@@ -84,6 +101,7 @@ public class DbUtils {
         try {
             Connection connection = DriverManager.getConnection(url, user, pass);
 
+            //checking if the user already exists
             PreparedStatement userExists = connection
                     .prepareStatement(DbCom.select("*", "users", "username = ?"));
             userExists.setString(1, username);
@@ -95,6 +113,7 @@ public class DbUtils {
                 alert.setContentText("User already exists!");
                 alert.show();
             } else {
+                //inserting the info into users&specific acc type table
                 PreparedStatement insertUserInfo = connection.prepareStatement(DbCom.insertSpecColumns("users",
                         "username, password, acc_type, sign_up_date", "(?, ?, ?, NOW())"));
                 insertUserInfo.setString(1, username);
@@ -102,8 +121,6 @@ public class DbUtils {
                 insertUserInfo.setString(3, type);
 
                 insertUserInfo.executeUpdate();
-
-                System.out.println("test 1");
 
                 PreparedStatement insertType;
                 switch (type) {
@@ -135,17 +152,37 @@ public class DbUtils {
                         insertType.executeUpdate();
                         insertType.close();
                         break;
-                    case "student":
+                    case "student": //TODO design smth for students table
                         break;
                 }
             }
 
-            System.out.println("Test 2");
-        
+            //insert into logsbook table
+            PreparedStatement selecStatement = connection
+                    .prepareStatement(DbCom.select("user_id", "users", "username = ?"));
+            selecStatement.setString(1, username);
+
+            ResultSet rSet = selecStatement.executeQuery();
+            String result = null;
+
+            if (rSet.isBeforeFirst()) {
+                while (rSet.next()) {
+                    result = rSet.getString("user_id");
+                }
+
+                insertIntoLogsBook(
+                        "New account of the type " + type + " with user_id = " + result + " has been created!");
+            } else {
+                insertIntoLogsBook("New account has been created!");
+            }
+
+            //change the scene
             changeScene(event, "/designs/log-in.fxml", "Log in");
 
             userExists.close();
+            selecStatement.close();
             resultSet.close();
+            rSet.close();
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
