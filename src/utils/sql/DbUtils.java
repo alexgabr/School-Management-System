@@ -106,8 +106,7 @@ public class DbUtils {
         try {
             Connection connection = DriverManager.getConnection(url, user, pass);
             PreparedStatement userExists = connection
-                    .prepareStatement(DbCom.select("password, acc_type", "users", "username = ?"));
-
+                    .prepareStatement(DbCom.select("*", "users", "username = ?"));
             userExists.setString(1, username);
             ResultSet resultSet = userExists.executeQuery();
 
@@ -135,7 +134,13 @@ public class DbUtils {
                         alert.show();
                     }
                 }
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+
+                alert.setContentText("User not found!");
+                alert.show();
             }
+            
             userExists.close();
             resultSet.close();
             connection.close();
@@ -271,28 +276,32 @@ public class DbUtils {
             Connection connection = DriverManager.getConnection(url, user, pass);
 
             PreparedStatement select = connection
-                    .prepareStatement(DbCom.select("username", "users", "username = ?"));
+                    .prepareStatement(DbCom.select("*", "users", "username = ?"));
             select.setString(1, username);
             ResultSet resultSet = select.executeQuery();
 
-            PreparedStatement insert = connection
-                    .prepareStatement(
-                            DbCom.updateRows("users", "password", newpass, "varchar", "username = ?"));
-            insert.setString(1, username);
-
-            if (resultSet == null) { // TODO de testat
+            if (!resultSet.isBeforeFirst()) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
 
                 alert.setContentText("User not found");
                 alert.show();
             } else {
+                System.out.println("Begin password reset");
+
+                PreparedStatement insert = connection
+                        .prepareStatement(DbCom.updateRows("users", "password", "?", "varchar", "username = ?"));
+                insert.setString(1, newpass);
+                insert.setString(2, username);
+
                 insert.executeUpdate();
+                insert.close();
 
                 changeScene(event, "/designs/log-in.fxml", "Log in");
+
+                System.out.println("Password reset completed!");
             }
 
             select.close();
-            insert.close();
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
