@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ResetPassController">
    <children>
       <Pane layoutX="69.0" layoutY="77.0" prefHeight="262.0" prefWidth="459.0" style="-fx-background-color: #f0cb0f;">
@@ -34,6 +33,14 @@
             <Button fx:id="bt_resetpass" layoutX="158.0" layoutY="193.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="142.0" style="-fx-background-color: #ffe041;" text="Reset password">
                <font>
                   <Font size="16.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Button fx:id="bt_back" layoutX="5.0" layoutY="18.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="78.0" style="-fx-background-color: transparent;" text="Back" underline="true">
+               <font>
+                  <Font size="18.0" />
                </font>
                <cursor>
                   <Cursor fx:constant="HAND" />
