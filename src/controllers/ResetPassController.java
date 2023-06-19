@@ -11,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -19,6 +20,9 @@ import utils.sql.DbUtils;
 public class ResetPassController implements Initializable {
     @FXML
     private Button bt_resetpass;
+
+    @FXML
+    private Button bt_back;
 
     @FXML
     private PasswordField tf_newpass;
@@ -31,10 +35,21 @@ public class ResetPassController implements Initializable {
         bt_resetpass.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                DbUtils.passForget(event, tf_username.getText(), tf_newpass.getText());
-                //TODO add back button on page
-                //TODO display allert if empty field
-                //TODO display allert if user not found
+                if (tf_username.getText().trim().isEmpty() || tf_newpass.getText().trim().isEmpty()) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+
+                    alert.setContentText("Incorrect input format! Try again!");
+                    alert.show();
+                } else {
+                    DbUtils.passForget(event, tf_username.getText(), tf_newpass.getText());
+                }
+            }
+        });
+
+        bt_back.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                DbUtils.changeScene(event, "/designs/log-in.fxml", "Log in");
             }
         });
     }
