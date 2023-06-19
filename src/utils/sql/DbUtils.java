@@ -275,24 +275,23 @@ public class DbUtils {
             select.setString(1, username);
             ResultSet resultSet = select.executeQuery();
 
-            PreparedStatement insert = connection
-                    .prepareStatement(
-                            DbCom.updateRows("users", "password", newpass, "varchar", "username = ?"));
-            insert.setString(1, username);
-
             if (resultSet == null) { // TODO de testat
                 Alert alert = new Alert(Alert.AlertType.ERROR);
 
                 alert.setContentText("User not found");
                 alert.show();
             } else {
+                PreparedStatement insert = connection
+                        .prepareStatement(
+                                DbCom.updateRows("users", "password", newpass, "varchar", "username = ?"));
+                insert.setString(1, username);
                 insert.executeUpdate();
+                insert.close();
 
                 changeScene(event, "/designs/log-in.fxml", "Log in");
             }
 
             select.close();
-            insert.close();
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();

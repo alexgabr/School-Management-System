@@ -32,6 +32,9 @@ public class ResetPassController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 DbUtils.passForget(event, tf_username.getText(), tf_newpass.getText());
+                //TODO add back button on page
+                //TODO display allert if empty field
+                //TODO display allert if user not found
             }
         });
     }
