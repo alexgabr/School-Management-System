@@ -280,6 +280,8 @@ public class DbUtils {
 
                 alert.setContentText("User not found");
                 alert.show();
+
+                insertIntoLogsBook("ALERT! Unknown users attempted to reset a password!");
             } else {
                 System.out.println("Begin password reset");
 
@@ -293,9 +295,13 @@ public class DbUtils {
 
                 changeScene(event, "/designs/log-in.fxml", "Log in");
 
+                String id = resultSet.getString("user_id");
+
+                insertIntoLogsBook("User with user_id = " + id + " reseted his password!");
                 System.out.println("Password reset completed!");
             }
 
+            resultSet.close();
             select.close();
             connection.close();
         } catch (SQLException e) {
