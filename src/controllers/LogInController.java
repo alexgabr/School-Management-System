@@ -13,6 +13,7 @@ import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -38,7 +39,14 @@ public class LogInController implements Initializable {
         bt_login.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                DbUtils.logInUser(event, tf_username.getText(), tf_password.getText());
+                if (tf_username.getText().trim().isEmpty() || tf_password.getText().trim().isEmpty()) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+
+                    alert.setContentText("Incorrect input format! Try again!");
+                    alert.show();
+                } else {
+                    DbUtils.logInUser(event, tf_username.getText(), tf_password.getText());
+                }
             }
         });
 

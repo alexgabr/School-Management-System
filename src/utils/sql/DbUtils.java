@@ -106,8 +106,7 @@ public class DbUtils {
         try {
             Connection connection = DriverManager.getConnection(url, user, pass);
             PreparedStatement userExists = connection
-                    .prepareStatement(DbCom.select("password, acc_type", "users", "username = ?"));
-
+                    .prepareStatement(DbCom.select("*", "users", "username = ?"));
             userExists.setString(1, username);
             ResultSet resultSet = userExists.executeQuery();
 
@@ -135,7 +134,13 @@ public class DbUtils {
                         alert.show();
                     }
                 }
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+
+                alert.setContentText("User not found!");
+                alert.show();
             }
+            
             userExists.close();
             resultSet.close();
             connection.close();
