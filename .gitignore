@@ -1,2 +1,9 @@
 *.class
 .idea/workspace.xml
+out/production/School-Management-System/designs/homepage-principal.fxml
+out/production/School-Management-System/designs/homepage-staff.fxml
+out/production/School-Management-System/designs/homepage-teacher.fxml
+out/production/School-Management-System/designs/homepage.fxml
+out/production/School-Management-System/designs/log-in.fxml
+out/production/School-Management-System/designs/reset-pass-page.fxml
+out/production/School-Management-System/designs/sign-up.fxml
