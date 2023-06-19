@@ -127,11 +127,18 @@ public class DbUtils {
                                 changeScene(event, "/designs/homepage.fxml", "Welcome!");
                                 break;
                         }
+                        System.out.println("User " + username + " has logged in!");
+
+                        insertIntoLogsBook("User " + username + " has logged in!");
                     } else {
                         Alert alert = new Alert(Alert.AlertType.ERROR);
 
                         alert.setContentText("User not found!");
                         alert.show();
+
+                        System.out.println("Unsuccesfull attempt to log in with username " + username + "!");
+
+                        insertIntoLogsBook("ALERT! Unsuccesfull attempt to log in with username " + username + "!");
                     }
                 }
             } else {
@@ -139,8 +146,10 @@ public class DbUtils {
 
                 alert.setContentText("User not found!");
                 alert.show();
+
+                insertIntoLogsBook("Unsuccesfull attempt to log in with unknown username!");
             }
-            
+
             userExists.close();
             resultSet.close();
             connection.close();
