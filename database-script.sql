@@ -28,10 +28,9 @@ CREATE TABLE students(
 	student_id INT,
     first_name VARCHAR(80) NOT NULL,
     last_name VARCHAR(80) NOT NULL,
-    class_year VARCHAR(10) NOT NULL,
+    class_year VARCHAR(10),
     global_average DECIMAL(2,2),
-    admision_date DATE ,
-    FOREIGN KEY(student_id) REFERENCES users(user_id)
+    admision_date DATE
 );
 
 CREATE TABLE teachers(
@@ -63,26 +62,27 @@ CREATE TABLE grades(
     grade INT NOT NULL,
     subject_ VARCHAR(80) NOT NULL,
     date_ DATE NOT NULL,
-    student INT NOT NULL,
-	FOREIGN KEY(student) REFERENCES students(student_id)
+    student INT NOT NULL
+);
+
+CREATE TABLE classrooms_list(
+    class_id INT PRIMARY KEY AUTO_INCREMENT,
+    class_year VARCHAR(10)
 );
 
 CREATE TABLE math(
 	id INT NOT NULL,
-    average INT,
-    FOREIGN KEY(id) REFERENCES students(student_id)
+    average INT
 );
 
 CREATE TABLE physics(
 	id INT NOT NULL,
-    average INT,
-    FOREIGN KEY(id) REFERENCES students(student_id)
+    average INT
 );
 
 CREATE TABLE chemistry(
 	id INT,
-    average INT,
-    FOREIGN KEY(id) REFERENCES students(student_id)
+    average INT
 );
 
 COMMIT;

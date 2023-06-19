@@ -48,7 +48,7 @@ public class SignUpController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 if (tf_first_name.getText().trim().isEmpty() || tf_last_name.getText().trim().isEmpty()
-                        || tf_password.getText().trim().isEmpty() /*|| ch_occupation.getValue().trim().isEmpty()*/) { //TODO
+                        || tf_password.getText().trim().isEmpty() || ch_occupation.getSelectionModel().isEmpty()) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
 
                     alert.setContentText("Incorrect input format! Try again!");

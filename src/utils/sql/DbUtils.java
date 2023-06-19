@@ -51,7 +51,7 @@ public class DbUtils {
         }
     }
 
-    public static String insertUserId(String table, String columnNameId, String firstName, String lastName) {
+    public static String insertUserID(String table, String columnNameId, String firstName, String lastName) {
         String username = firstName + " " + lastName;
         String select = null;
         try {
@@ -187,7 +187,7 @@ public class DbUtils {
                         insertType.close();
 
                         // inserting the user id in the table
-                        id = insertUserId("staff", "staff_id", firstName, lastName);
+                        id = insertUserID("staff", "staff_id", firstName, lastName);
                         // inserting the id in the salary table
                         insertSalaryID("staff_salaries", "id", id, firstName, lastName);
                         break;
@@ -201,7 +201,7 @@ public class DbUtils {
                         insertType.close();
 
                         // inserting the user id in the table
-                        id = insertUserId("staff", "staff_id", firstName, lastName);
+                        id = insertUserID("staff", "staff_id", firstName, lastName);
                         // inserting the id in the salary table
                         insertSalaryID("staff_salaries", "id", id, firstName, lastName);
                         break;
@@ -215,11 +215,22 @@ public class DbUtils {
                         insertType.close();
 
                         // inserting the user id in the table
-                        id = insertUserId("teachers", "teacher_id", firstName, lastName);
+                        id = insertUserID("teachers", "teacher_id", firstName, lastName);
                         // inserting the id in the salary table
                         insertSalaryID("teachers_salaries", "id", id, firstName, lastName);
                         break;
-                    case "student": // TODO design smth for students table
+                    case "student":
+                        insertType = connection
+                                .prepareStatement(
+                                        DbCom.insertSpecColumns("students", "first_name, last_name", "(?, ?)"));
+                        insertType.setString(1, firstName);
+                        insertType.setString(2, lastName);
+
+                        insertType.executeUpdate();
+                        insertType.close();
+
+                        // inserting the user id in the table
+                        insertUserID("students", "student_id", firstName, lastName);
                         break;
                 }
             }
@@ -236,7 +247,6 @@ public class DbUtils {
                 while (rSet.next()) {
                     result = rSet.getString("user_id");
                 }
-
                 insertIntoLogsBook(
                         "New account of the type " + type + " with user_id = " + result + " has been created!");
             } else {
