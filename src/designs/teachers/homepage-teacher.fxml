@@ -1,13 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.pages.homepages.TeachersHomepageController">
+   <children>
+      <Pane layoutX="10.0" layoutY="10.0" prefHeight="61.0" prefWidth="291.0" style="-fx-background-color: #ffd606;">
+         <children>
+            <Label layoutX="15.0" layoutY="20.0" text="School Management System">
+               <font>
+                  <Font name="Arial Rounded MT Bold" size="19.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <Label layoutX="25.0" layoutY="30.0" text="School Management System">
+         <font>
+            <Font name="Arial Rounded MT Bold" size="19.0" />
+         </font>
+      </Label>
+      <Label fx:id="lb_welcome" layoutX="249.0" layoutY="104.0" prefHeight="32.0" prefWidth="422.0" text="Welcome, ...!" textAlignment="CENTER" underline="true">
+         <font>
+            <Font name="Arial" size="30.0" />
+         </font>
+      </Label>
+      <Button fx:id="bt_students_menu" layoutX="654.0" layoutY="277.0" mnemonicParsing="false" prefHeight="118.0" prefWidth="159.0" style="-fx-background-color: #ffe041;" text="Students">
+         <font>
+            <Font name="Arial" size="23.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button fx:id="bt_dashboard" layoutX="107.0" layoutY="277.0" mnemonicParsing="false" prefHeight="118.0" prefWidth="159.0" style="-fx-background-color: #ffe041;" text="Dashboard">
+         <font>
+            <Font name="Arial" size="23.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button fx:id="bt_classes" layoutX="385.0" layoutY="277.0" mnemonicParsing="false" prefHeight="118.0" prefWidth="159.0" style="-fx-background-color: #ffe041;" text="Classes">
+         <font>
+            <Font name="Arial" size="23.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button fx:id="bt_settings" layoutX="385.0" layoutY="438.0" mnemonicParsing="false" prefHeight="118.0" prefWidth="159.0" style="-fx-background-color: #ffe041;" text="Settings">
+         <font>
+            <Font name="Arial" size="23.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+   </children>
 </AnchorPane>
