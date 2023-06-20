@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import utils.sql.DbUtils;
 
 public class PrincipalsHomepageController implements Initializable {
     @FXML
@@ -39,7 +40,7 @@ public class PrincipalsHomepageController implements Initializable {
 
             @Override
             public void handle(ActionEvent event) {
-
+                DbUtils.changeScene(event, "/designs/principal/dashboard-principal.fxml", "Dashboard", null);
             }
 
         });
@@ -48,7 +49,7 @@ public class PrincipalsHomepageController implements Initializable {
 
             @Override
             public void handle(ActionEvent event) {
-
+                DbUtils.changeScene(event, "/designs/principal/teachersMenu-principal.fxml", "Teachers Menu", null);
             }
 
         });
@@ -57,7 +58,7 @@ public class PrincipalsHomepageController implements Initializable {
 
             @Override
             public void handle(ActionEvent event) {
-
+                DbUtils.changeScene(event, "/designs/principal/studentsMenu-principal.fxml", "Students Menu", null);
             }
 
         });
@@ -66,7 +67,7 @@ public class PrincipalsHomepageController implements Initializable {
 
             @Override
             public void handle(ActionEvent event) {
-
+                DbUtils.changeScene(event, "/designs/principal/salariesMenu-principal.fxml", "Salaries Menu", null);
             }
 
         });
