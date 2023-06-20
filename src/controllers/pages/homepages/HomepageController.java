@@ -2,7 +2,7 @@
 //Copyright Alexandru Vrincianu
 //2023
 //
-package controllers;
+package controllers.pages.homepages;
 
 public class HomepageController {
 }
