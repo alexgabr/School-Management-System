@@ -65,4 +65,8 @@ public class LogInController implements Initializable {
         });
     }
 
+    public String getUsername(){
+        return tf_username.getText();
+    }
+
 }
