@@ -53,14 +53,14 @@ public class LogInController implements Initializable {
         bt_sign_up.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                DbUtils.changeScene(event, "/designs/sign-up.fxml", "Sign up");
+                DbUtils.changeScene(event, "/designs/sign-up.fxml", "Sign up", null);
             }
         });
 
         bt_reset_pass.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                DbUtils.changeScene(event, "/designs/reset-pass-page.fxml", "Reset password");
+                DbUtils.changeScene(event, "/designs/reset-pass-page.fxml", "Reset password", null);
             }
         });
     }

@@ -7,7 +7,6 @@ package controllers.pages.homepages;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import controllers.LogInController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -31,12 +30,10 @@ public class PrincipalsHomepageController implements Initializable {
     @FXML
     private Label lb_welcome;
 
+    String username;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        LogInController login = new LogInController();
-        String username = login.getUsername();
-
-        lb_welcome.setText("Welcome, " + username + "!");
 
         bt_dashboard.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -73,9 +70,10 @@ public class PrincipalsHomepageController implements Initializable {
             }
 
         });
+
     }
 
-    public void setWelcome(String username) {
-
+    public void setUsername(String username) {
+        lb_welcome.setText("Welcome, " + username + "!");
     }
 }

@@ -13,25 +13,49 @@ import javafx.event.ActionEvent;
 
 import java.io.IOException;
 import java.sql.*;
-import java.util.Objects;
+
+import controllers.pages.homepages.PrincipalsHomepageController;
 
 public class DbUtils {
 
     private final static String url = "jdbc:mysql://localhost:3306/school", user = "root", pass = "pass";
 
-    public static void changeScene(ActionEvent event, String fxmlFile, String title) {
+    public static void changeScene(ActionEvent event, String fxmlFile, String title, String username) {
         Parent root = null;
-        try {
-            root = FXMLLoader.load(Objects.requireNonNull(DbUtils.class.getResource(fxmlFile)));
-        } catch (IOException e) {
-            e.printStackTrace();
+        FXMLLoader loader = new FXMLLoader(DbUtils.class.getResource(fxmlFile));
+
+        if (username != null) {
+            try {
+                root = loader.load();
+                PrincipalsHomepageController controller = loader.getController();
+                controller.setUsername(username);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                root = FXMLLoader.load(DbUtils.class.getResource(fxmlFile));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        if (fxmlFile.equals("/designs/log-in.fxml") || fxmlFile.equals("/designs/sign-up.fxml")
+                || fxmlFile.equals("/designs/reset-pass-page.fxml")) {
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
-        stage.setTitle(title);
-        stage.setScene(new Scene(root, 600, 400));
-        stage.show();
+            stage.setTitle(title);
+            stage.setScene(new Scene(root, 600, 400));
+            stage.show();
+        } else {
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            stage.setTitle(title);
+            stage.setScene(new Scene(root, 900, 600));
+            stage.show();
+        }
+
     }
 
     public static void insertIntoLogsBook(String info) {
@@ -115,16 +139,16 @@ public class DbUtils {
                     if (resultSet.getString("password").equals(password)) {
                         switch (resultSet.getString("acc_type")) {
                             case "principal":
-                                changeScene(event, "/designs/homepage-principal.fxml", "Welcome!");
+                                changeScene(event, "/designs/principal/homepage-principal.fxml", "Welcome!", username);
                                 break;
                             case "staff":
-                                changeScene(event, "/designs/homepage-staff.fxml", "Welcome!");
+                                changeScene(event, "/designs/staff/homepage-staff.fxml", "Welcome!", username);
                                 break;
                             case "teacher":
-                                changeScene(event, "/designs/homepage-teacher.fxml", "Welcome!");
+                                changeScene(event, "/designs/teachers/homepage-teacher.fxml", "Welcome!", username);
                                 break;
                             case "student":
-                                changeScene(event, "/designs/homepage.fxml", "Welcome!");
+                                changeScene(event, "/designs/students/homepage.fxml", "Welcome!", username);
                                 break;
                         }
                         System.out.println("User " + username + " has logged in!");
@@ -268,7 +292,7 @@ public class DbUtils {
             }
 
             // change the scene
-            changeScene(event, "/designs/log-in.fxml", "Log in");
+            changeScene(event, "/designs/log-in.fxml", "Log in", null);
 
             userExists.close();
             selecStatement.close();
@@ -307,7 +331,7 @@ public class DbUtils {
                 insert.executeUpdate();
                 insert.close();
 
-                changeScene(event, "/designs/log-in.fxml", "Log in");
+                changeScene(event, "/designs/log-in.fxml", "Log in", null);
 
                 String id = resultSet.getString("user_id");
 

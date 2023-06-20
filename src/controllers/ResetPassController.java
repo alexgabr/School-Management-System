@@ -49,7 +49,7 @@ public class ResetPassController implements Initializable {
         bt_back.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                DbUtils.changeScene(event, "/designs/log-in.fxml", "Log in");
+                DbUtils.changeScene(event, "/designs/log-in.fxml", "Log in", null);
             }
         });
     }
