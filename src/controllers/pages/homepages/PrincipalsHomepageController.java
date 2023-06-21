@@ -29,6 +29,9 @@ public class PrincipalsHomepageController implements Initializable {
     private Button bt_teachers_menu;
 
     @FXML
+    private Button bt_classrooms;
+
+    @FXML
     private Label lb_welcome;
 
     String username;
@@ -68,6 +71,15 @@ public class PrincipalsHomepageController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 DbUtils.changeScene(event, "/designs/principal/salariesMenu-principal.fxml", "Salaries Menu", null);
+            }
+
+        });
+
+        bt_classrooms.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                DbUtils.changeScene(event, "/designs/principal/classes-principal.fxml", "Salaries Menu", null);
             }
 
         });
